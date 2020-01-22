@@ -3,9 +3,9 @@ title: "Computational Biology Homework (Bio381)"
 author: "Aura M. Alonso-Rodriguez"
 date: "Spring 2020"
 output: 
-  html_document: 
-    highlight: zenburn
-    theme: cerulean
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 ---
 
 ```{r setup, include=FALSE}
@@ -15,6 +15,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ![](https://aurapr15.github.io/AlonsoRodzBio381/20190928_124334.jpg)
 
-
-
 ## [Homework 1: Typora](TyporaPractice.html)
+
+***  
+
+
+### Aura M. Alonso-Rodriguez, MSc  
+PhD Student | NSF [QuEST](https://www.uvm.edu/quest) Trainee | [Gund](https://www.uvm.edu/gund) Graduate Fellow  
+[Rubenstein](https://www.uvm.edu/rsenr) School of Environment and Natural Resources  
+University of Vermont, Burlington, VT  
+<Aura.Alonso-Rodriguez@uvm.edu>  
+[Twitter](https://twitter.com/AuraAlonsoRodz) |
+[Research Gate](https://www.researchgate.net/profile/Aura_Alonso-Rodriguez)  
+
+
