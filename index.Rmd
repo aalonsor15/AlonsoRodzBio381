@@ -4,6 +4,7 @@ author: "Aura M. Alonso-Rodriguez"
 date: "Spring 2020"
 output: 
   html_document: 
+    highlight: zenburn
     theme: cerulean
 ---
 
