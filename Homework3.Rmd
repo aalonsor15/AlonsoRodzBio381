@@ -1,0 +1,76 @@
+---
+title: "Homework 3: Regular Expressions"
+author: "Aura M. Alonso-Rodríguez"
+date: "January 29, 2020"
+output: html_document
+---  
+
+<br />
+Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework03_F2020.html). 
+
+<br />
+
+##### Exercise 1
+
+```
+Find:\t+
+This finds one or more consecutive tabs
+
+Replace:,
+This replaces the above with a comma
+```
+##### Exercise 2
+
+```
+Find:(\w+), (\w+), (.*)
+The first two expressions are the same- (\w+), - which finds each name and the comma afterwards. Then (.*) finds all the rest, which is the university name. Whatever is inside a parenthesis is grouped, so that we can change the order of the names later.
+
+Replace:\2 \1 \(\3\)
+We first switched the order of the names by using the number automatically assigned to each grouping, and then put the university name inside parenthesis.
+```
+##### Exercise 3
+
+```
+Find: (\d+)
+This finds all number characters that are preceded by a space, and groups them.
+
+Replace:\n\1
+This puts each group of numbers in a separate line.
+```
+##### Exercise 4
+
+```
+Find:(\d+) (.+)(.mp3)
+This creates three groupings. One includes the track number, the second includes the name of the song, and the third includes the format (.mp3).
+
+Replace:\2_\1\3
+This changes the order of the groups, so that the name of the song is first, followed by a subscript and the track number, leaving the format at the end.
+```
+##### Exercise 5
+
+```
+Find:(\w)\w+,(\w+),.+,(\d+)
+I first group the first letter of the genus name, then the species name, and finally the last number of the line. The rest is coded but is not grouped because it will be ignored in the replacement.
+
+Replace:\1_\2,\3
+This then puts the first letter of the genus, followed by a subscript and the species name, and finally a comma and the number that we wanted to keep.
+```
+##### Exercise 6
+
+```
+Find:(\w)\w+,(\w{4})\w+,.+,(\d+)
+The only difference here is that in the species name, I used {4} to select only the first 4 letters of the name, and I left the rest of the name out of the parenthesis because we are not keeping it in the replacement.
+
+Replace:\1_\2,\3
+Same replacement code as exercise 5, since the only difference is shortening the species name.
+```
+##### Exercise 7
+
+```
+Find:(\w{3})\w+,(\w{3})\w+,(.+),(.+)
+Using the {} I selected the first three letters of the genus and species names, and then used .+ for the numberical data. Everything I need to keep is grouped in between parenthesis.
+
+Replace:\1\2, \4, \3
+Here I merged the first 3 letters of the genus and species names, then changed the order of the numerical data by switching the name of the groupings.
+```
+
