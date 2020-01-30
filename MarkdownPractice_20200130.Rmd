@@ -1,0 +1,68 @@
+---
+title: "MarkdownPractice"
+author: "Aura M. Alonso-Rodriguez"
+date: "1/30/2020"
+output: html_document
+---
+
+In this chunk of code I can set up global options for all of the chunks of code in this file.
+Choosing echo = False will make my code not show up in the final document. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Here are some examples of equations using LaTeX:
+
+$a + b$
+$$a + b$$
+$$\alpha + \beta$$
+$$S_a$$
+
+$$S_{a + b}$$
+$$S_{a + b_{\alpha + \beta}}$$
+$$Z^{a+b}$$
+$$P(\mbox{occurrence of species A})= Z_A$$ #the mbox function allows plain text to be included into equations in LaTeX.
+
+
+### Now we will work on FENCING:
+
+```
+plain text and nothing else.
+$$\alpha + \beta$$
+```
+
+Use a single backtick for plain text `in a sentence`.
+
+The value of $\pi$ is `r pi`.
+
+```{r echo=TRUE, eval=FALSE}
+# We want to get in the habit of commenting all of our code, because that is the only way to make our work repeatable. Make comments!
+runif(10)
+
+# Using eval=FALSE will remove the output from the html file. Using echo=FALSE will remove the chunk code from the html file.
+```
+
+
+
+
+
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
