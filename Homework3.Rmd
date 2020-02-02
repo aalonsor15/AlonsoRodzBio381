@@ -6,7 +6,7 @@ output: html_document
 ---  
 
 <br />
-Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework03_F2020.html). 
+Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework03_S2020.html). 
 
 <br />
 
