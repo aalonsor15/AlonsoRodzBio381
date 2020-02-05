@@ -13,14 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-<img src="20190928_124334.jpg" width="550" height="415" />  
+<img src="20190928_124334.jpg" width="550" height="415" />
 
-<br />
 
-### Homeworks  
-* #### [Typora](TyporaPractice.html)
-* #### [Regular Expressions](Homework3.html)
-* #### [Vectors](Homework4.html)
+## Homeworks  
+* ### [Typora](TyporaPractice.html)
+* ### [Regular Expressions](Homework3.html)
+* ### [Vectors](Homework4.html)
 
 <br />
 ***  
