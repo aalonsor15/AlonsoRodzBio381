@@ -68,9 +68,9 @@ Same replacement code as exercise 5, since the only difference is shortening the
 
 ```
 Find:(\w{3})\w+,(\w{3})\w+,(.+),(.+)
-Using the {} I selected the first three letters of the genus and species names, and then used .+ for the numberical data. Everything I need to keep is grouped in between parenthesis.
+Using the {} I selected the first three letters of the genus and species names, and then used .+ for the numerical data. Everything I need to keep is grouped in between parenthesis.
 
 Replace:\1\2, \4, \3
-Here I merged the first 3 letters of the genus and species names, then changed the order of the numerical data by switching the name of the groupings.
+Here I merged the first 3 letters of the genus and species names, then changed the order of the numerical data by switching the order of the groupings.
 ```
 

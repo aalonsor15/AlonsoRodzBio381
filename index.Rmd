@@ -17,7 +17,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## [Homework 1: Typora](TyporaPractice.html)
 ## [Homework 2: Regular Expressions](Homework3.html)
+## [Homework 3: Vectors](Homework4.html)
 
+<br />
 ***  
 
 ### Aura M. Alonso-Rodriguez, MSc  
