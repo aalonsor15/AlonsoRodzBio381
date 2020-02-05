@@ -15,9 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <img src="20190928_124334.jpg" width="550" height="415" />  
 
-## [Homework 1: Typora](TyporaPractice.html)
-## [Homework 2: Regular Expressions](Homework3.html)
-## [Homework 3: Vectors](Homework4.html)
+<br />
+
+### Homeworks  
+* #### [Typora](TyporaPractice.html)
+* #### [Regular Expressions](Homework3.html)
+* #### [Vectors](Homework4.html)
 
 <br />
 ***  
