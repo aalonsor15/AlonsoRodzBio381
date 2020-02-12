@@ -23,7 +23,8 @@ knitr::opts_chunk$set(echo = TRUE)
 * ### [Matrices, lists and data frames](Homework5.html)
 
 <br />
-<hr />
+
+***
 
 ### Aura M. Alonso-Rodriguez, MSc  
 PhD Student | NSF [QuEST](https://www.uvm.edu/quest) Trainee | [Gund](https://www.uvm.edu/gund) Graduate Fellow  
