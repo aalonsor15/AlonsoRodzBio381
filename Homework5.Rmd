@@ -1,0 +1,185 @@
+---
+title: "Homework 5: Matrices, lists and data frames"
+author: "Aura M. Alonso-Rodríguez"
+date: "February 12, 2020"
+output: html_document
+---
+
+<br />
+Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework05_S2020.html). 
+
+<br />
+
+##### Exercise 1  
+<br />
+
++ Assign to the variable n_dims a single random integer between 3 and 10.  
+```{r}
+n_dims <- sample(3:10, 1)
+print(n_dims)
+```
+
++ Create a vector of consecutive integers from 1 to n_dims2.
+```{r}
+my_vec <- c(1:(n_dims^2))
+print(my_vec)
+```
+
++ Use the sample function to randomly reshuffle these values.
+```{r}
+my_vec2 <- sample(my_vec)
+print(my_vec2)
+```
+
++ create a square matrix with these elements.
++ print out the matrix.
+```{r}
+my_mat <- matrix(data=my_vec2, nrow=n_dims, ncol=n_dims)
+print(my_mat)
+```
+
+
++ find a function in r to transpose the matrix.  
+  print it out again and note how it has changed.
+```{r}
+my_mat2 <- t(my_mat)
+print(my_mat2)
+```
+
++ calculate the sum and the mean of the elements in the first row and the last row.
+```{r}
+sum(my_mat2[1,])
+sum(my_mat2[n_dims,])
+mean(my_mat2[1,])
+mean(my_mat2[n_dims,])
+
+sum(my_mat2[1,], my_mat2[n_dims,])
+mean(c(my_mat2[1,],my_mat2[n_dims,]))
+
+```
+
++ read about the eigen() function and use it on your matrix
+```{r}
+z <- eigen(my_mat2)
+print(z)
+```
+
++ Look carefully at the elements of $values and $vectors. What kind of numbers are these?
+  Dig in with the typeof() function to figure out their type.
+```{r}
+typeof(z$values)
+typeof(z$vectors)
+```
+
++ if have set your code up properly, you should be able to re-run it and create a matrix of different size because n_dims will change.
+YES! Its working :)
+
+<br />
+
+##### Exercise 2  
+<br />
+
+Create a list with the following named elements:  
+
++ my_matrix, which is a 4 x 4 matrix filled with random uniform values
+```{r}
+my_matrix <- matrix(data=runif(16), nrow=4, ncol=4)
+print(my_matrix)
+```
+
++ my_logical which is a 100-element vector of TRUE or FALSE values. Do this efficiently by setting up a vector of random values and then applying an inequality to it.
+```{r}
+a <- runif(100)
+my_logical <- a>0.6
+print(my_logical)
+```
+
++ my_letters, which is a 26-element vector of all the lower-case letters in random order.
+```{r}
+my_letters <- c(sample(letters, size = 26, replace = FALSE))
+print(my_letters)
+```
+
++ now creating a list with all of these named elements
+```{r}
+big_list <- list(my_matrix,
+                 my_logical,
+                 my_letters)
+print(big_list)
+```
+
++ create a new list, which has the element[2,2] from the matrix, the second element of the logical vector, and the second element of the letters vector.
+```{r}
+my_list <- list(my_matrix[2,2],
+                my_logical[2],
+                my_letters[2])
+print(my_list)
+
+```
+
++ use the typeof() function to confirm the underlying data types of each component in this list
+```{r}
+typeof(my_list[[1]])
+typeof(my_list[[2]])
+typeof(my_list[[3]])
+```
+
++ combine the underlying elements from the new list into a single atomic vector with the c() function.
+```{r}
+my_vector <- c(my_list[[1]], my_list[[2]], my_list[[3]])
+print(my_vector)
+```
+
++ what is the data type of this vector?
+```{r}
+typeof(my_vector)
+```
+
+<br />
+
+##### Exercise 3
+<br />
+
+Create a data frame with two variables (= columns) and 26 cases (= rows).  
++ Call the first variable my_unis and fill it with a random uniform value from 0 to 10
++ Call the second variable my_letters and fill it with 26 capital letters in random order.
+```{r}
+my_unis <- runif(26, min = 0, max = 10)
+my_letters <- c(sample(LETTERS, size = 26, replace = FALSE))
+my_df <- data.frame(my_unis, my_letters, stringsAsFactors = FALSE)
+head(my_df)
+```
+
++ for the first variable, use a single line of code in R to select 4 random rows and replace the numerical values in those rows with NA.
+```{r}
+library(naniar)
+my_df2 <- my_df %>% replace_with_na(replace = list(my_unis = sample(my_unis, size = 4, replace = FALSE)))
+
+# a simpler way that doesn't require the library - how Lauren did it
+my_df[sample(length(my_unis), size = 4, replace = FALSE),1] <- NA
+
+```
+
++ for the first variable, write a single line of R code to identify which rows have the missing values.
+```{r}
+# is.na(my_df$my_unis)  gives me a boolean vector, assigning TRUE to the NA slots. 
+# But this is not an easy way to view where the NAs are
+
+# To get the number of rows that have NAs, its better to use the following
+which(!complete.cases(my_df$my_unis)) # find NA slots
+
+```
+
+
++ for the second variable, sort it in alphabetical order
+```{r}
+my_df <- my_df[order(my_df$my_letters),]
+head(my_df)
+```
+
+
++ calculate the column mean for the first variable.
+```{r}
+mean(my_df$my_unis)
+```
+
