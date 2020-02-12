@@ -180,6 +180,6 @@ head(my_df)
 
 + calculate the column mean for the first variable.
 ```{r}
-mean(my_df$my_unis)
+mean(my_df$my_unis, na.rm = TRUE)
 ```
 
