@@ -1,0 +1,156 @@
+---
+title: "Homework 6: Simulating and Fitting Data Distributions"
+author: "Aura M. Alonso-Rodríguez"
+date: "February 19, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+<br />
+Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework06_S2020.html). 
+
+<br />
+
+For this exercise, I am using seedling height data from the June 2017 seedling census of the Tropical Responses to Altered Climate Experiment (TRACE) plots at Luquillo, Puerto Rico.
+
+```{r, warning=FALSE}
+library(MASS)
+library(ggplot2)
+
+z <- read.table("SeedHt.csv",header=TRUE,sep=",", stringsAsFactors=FALSE)
+str(z)
+summary(z)
+```
+
+#### Plot histogram of data
+
+```{r, warning=FALSE}
+p1 <- ggplot(data=z, aes(x=Height, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
+print(p1)
+
+# Add empirical density curve
+p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
+print(p1)
+```
+
+#### Get maximum likelihood parameters for normal
+```{r, warning=FALSE}
+normPars <- fitdistr(z$Height,"normal")
+print(normPars)
+str(normPars)
+normPars$estimate["mean"] # note structure of getting a named attribute
+```
+
+#### Plot normal probability density
+```{r, warning=FALSE}
+meanML <- normPars$estimate["mean"]
+sdML <- normPars$estimate["sd"]
+
+xval <- seq(0,max(z$Height),len=length(z$Height))
+
+stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$Height), args = list(mean = meanML, sd = sdML))
+p1 + stat
+
+```
+
+
+#### Plot exponential probability density
+```{r, warning=FALSE}
+expoPars <- fitdistr(z$Height,"exponential")
+rateML <- expoPars$estimate["rate"]
+
+stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$Height), args = list(rate=rateML))
+p1 + stat + stat2
+```
+
+
+#### Plot uniform probability density
+```{r,warning=FALSE}
+stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$Height), args = list(min=min(z$Height), max=max(z$Height)))
+p1 + stat + stat2 + stat3
+```
+
+#### Plot gamma probability density
+```{r, warning=FALSE}
+gammaPars <- fitdistr(z$Height,"gamma")
+shapeML <- gammaPars$estimate["shape"]
+rateML <- gammaPars$estimate["rate"]
+
+stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$Height), args = list(shape=shapeML, rate=rateML))
+p1 + stat + stat2 + stat3 + stat4
+```
+
+#### Plot beta probability density
+```{r, warning=FALSE}
+pSpecial <- ggplot(data=z, aes(x=Height/(max(Height + 0.1)), y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
+  xlim(c(0,1)) +
+  geom_density(size=0.75,linetype="dotted")
+
+betaPars <- fitdistr(x=z$Height/max(z$Height + 0.1),start=list(shape1=1,shape2=2),"beta")
+shape1ML <- betaPars$estimate["shape1"]
+shape2ML <- betaPars$estimate["shape2"]
+
+statSpecial <- stat_function(aes(x = xval, y = ..y..), fun = dbeta, colour="orchid", n = length(z$Height), args = list(shape1=shape1ML,shape2=shape2ML))
+pSpecial + statSpecial
+```
+
+#### Which distribution fits my data the best?  
+Probably the gamma. However, most of my data is still above the asymptote of the gamma curve. So maybe there is another distribution that fits best?
+```{r, warning=FALSE}
+library(fitdistrplus)
+descdist(z$Height, discrete=FALSE, boot=500)
+```
+The Cullen and Frey graph also points to a gamma distribution, so we'll go with that!
+
+
+
+***
+#### Simulation exercise
+
+Using the best-fitting distribution, go back to the code and get the maximum likelihood parameters. Use those to simulate a new data set, with the same length as your original vector, and plot that in a histogram and add the probability density curve. Right below that, generate a fresh histogram plot of the original data, and also include the probability density curve.
+
+```{r}
+#?rgamma
+g <- rgamma(n=1369, shapeML, rateML)
+g <- data.frame(1:1369,g)
+names(g) <- list("ID","myVar")
+str(g)
+summary(g$myVar)
+
+
+r1 <- ggplot(data=g, aes(x=myVar, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
+print(r1)
+
+# Add gamma probability density curve
+gammaPars1 <- fitdistr(g$myVar,"gamma")
+shapeML1 <- gammaPars1$estimate["shape"]
+rateML1 <- gammaPars1$estimate["rate"]
+
+xval1 <- seq(0,max(g$myVar),len=length(g$myVar))
+
+stat5 <- stat_function(aes(x = xval1, y = ..y..), fun = dgamma, colour="brown", n = length(g$myVar), args = list(shape=shapeML1, rate=rateML1))
+r1 + stat5
+
+# Plotting histogram of original data
+p5 <- ggplot(data=z, aes(x=Height, y=..density..)) +
+  geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
+print(p5)
+
+# Plotting histograms of real and simulated data side by side
+#install.packages("patchwork")
+library(patchwork)
+(p5 + stat4) | (r1 + stat5)
+
+```
+
+##### How do the two histogram profiles compare?  
+The distribution of the real data is less dispersed than the simulated data. The simulated data fits the gamma distribution curve perfectly, while the real data seems to have less variance.
+
+##### Do you think the model is doing a good job of simulating realistic data that match your original measurements? Why or why not?  
+The simulation does somewhat match the original data, but it shows a smoother distribution of plant heights. It seems to have removed the very high values (outliers) that were driving the curve towards the right. It also concentrated the majority of the data in between 10 and 30 cm, which seems similar to the real data.
+
+
