@@ -14,7 +14,7 @@ Full instructions for this homework are available [here](https://gotellilab.gith
 
 For this exercise, I am using seedling height data from the June 2017 seedling census of the Tropical Responses to Altered Climate Experiment (TRACE) plots at Luquillo, Puerto Rico.
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(MASS)
 library(ggplot2)
 
@@ -25,7 +25,7 @@ summary(z)
 
 #### Plot histogram of data
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 p1 <- ggplot(data=z, aes(x=Height, y=..density..)) +
   geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
 print(p1)
@@ -36,7 +36,7 @@ print(p1)
 ```
 
 #### Get maximum likelihood parameters for normal
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 normPars <- fitdistr(z$Height,"normal")
 print(normPars)
 str(normPars)
@@ -44,7 +44,7 @@ normPars$estimate["mean"] # note structure of getting a named attribute
 ```
 
 #### Plot normal probability density
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 meanML <- normPars$estimate["mean"]
 sdML <- normPars$estimate["sd"]
 
@@ -57,7 +57,7 @@ p1 + stat
 
 
 #### Plot exponential probability density
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 expoPars <- fitdistr(z$Height,"exponential")
 rateML <- expoPars$estimate["rate"]
 
@@ -67,13 +67,13 @@ p1 + stat + stat2
 
 
 #### Plot uniform probability density
-```{r,warning=FALSE}
+```{r,warning=FALSE, message=FALSE}
 stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$Height), args = list(min=min(z$Height), max=max(z$Height)))
 p1 + stat + stat2 + stat3
 ```
 
 #### Plot gamma probability density
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 gammaPars <- fitdistr(z$Height,"gamma")
 shapeML <- gammaPars$estimate["shape"]
 rateML <- gammaPars$estimate["rate"]
@@ -83,7 +83,7 @@ p1 + stat + stat2 + stat3 + stat4
 ```
 
 #### Plot beta probability density
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 pSpecial <- ggplot(data=z, aes(x=Height/(max(Height + 0.1)), y=..density..)) +
   geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
   xlim(c(0,1)) +
@@ -99,7 +99,7 @@ pSpecial + statSpecial
 
 #### Which distribution fits my data the best?  
 Probably the gamma. However, most of my data is still above the asymptote of the gamma curve. So maybe there is another distribution that fits best?
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(fitdistrplus)
 descdist(z$Height, discrete=FALSE, boot=500)
 ```
@@ -112,7 +112,7 @@ The Cullen and Frey graph also points to a gamma distribution, so we'll go with 
 
 Using the best-fitting distribution, go back to the code and get the maximum likelihood parameters. Use those to simulate a new data set, with the same length as your original vector, and plot that in a histogram and add the probability density curve. Right below that, generate a fresh histogram plot of the original data, and also include the probability density curve.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 #?rgamma
 g <- rgamma(n=1369, shapeML, rateML)
 g <- data.frame(1:1369,g)
