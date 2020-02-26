@@ -61,7 +61,7 @@ print(ano_plot)
 
 ```
 
-Since I have more than 2 groups, I used the Tukey post hoc test to generate pairwise comparisons between groups. As expected (due to the means I selected), richness pre hurricane is much different than all of the sampling times post hurricane, as forest recovery takes much longer. 
+Since I have more than 2 groups, I used the Tukey post hoc test to generate pairwise comparisons between groups. As expected (due to the means I selected), richness pre hurricane is much different than all of the sampling times right after the hurricane, but as time passes, plant richness continues to increase and gets close to pre hurricane values.
 
 However, after further consideration, I realized that ANOVA is probably not the best analysis to use here. It would have been better to use a repeated measures ANOVA. I will repeat the exercise below with only 2 time periods: pre and post hurricane.
 
