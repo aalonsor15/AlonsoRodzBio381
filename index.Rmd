@@ -22,6 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * ### [Vectors](Homework4.html)
 * ### [Matrices, lists and data frames](Homework5.html)
 * ### [Simulating and fitting data distributions](Homework6.html)
+* ### [Creating fake data sets to explore hypotheses](Homework7.html)
 
 <br />
 

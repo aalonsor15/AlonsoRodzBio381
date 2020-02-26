@@ -18,11 +18,13 @@
 # c. Dependent continuous
 # d. Dependent discrete
 
-# Both dep and indep are continuous (a-c): regression
-# Indep discrete and dep continuous (b-c): ANOVA
-# Both dep and indep are discrete(b-d): contingency table (freq of observations)
-# Indep continuous and dep discrete(a-d): logistic regression
+# Both dep and indep are continuous (a-c): linear regression (scatter plot)
+# Indep discrete and dep continuous (b-c): ANOVA (box plot)
+# Both dep and indep are discrete(b-d): contingency table (freq of observations) (heat or mosaic plot)
+# Indep continuous and dep discrete(a-d): logistic regression 
 
+# "effect size" is the difference between groups and how confident you can be that
+# the groups are statistically different. 
 
 # Regression analysis -----------------------------------------------------
 
@@ -201,7 +203,7 @@ barplot(height=data_matrix,
         col=c("cornflowerblue", "tomato"))
 
 # ggplot graphs
-install.packages("tidyverse")
+#install.packages("tidyverse")
 library(tidyverse)
 d_frame <- as.data.frame(data_matrix) #because ggplot can only work on df
 d_frame <- cbind(d_frame,list(Treatment=c("Cold", "Warm")))
@@ -215,5 +217,5 @@ p <- ggplot(data=d_frame,
         geom_bar(stat="identity",
                  position="dodge",
                  color=I("black")) +
-        scale_fill_manual(values=c("cornflowerblue", "colar"))
+        scale_fill_manual(values=c("cornflowerblue", "coral"))
 print(p)

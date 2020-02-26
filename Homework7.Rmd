@@ -1,0 +1,167 @@
+---
+title: "Homework 7: Creating Fake Data Sets To Explore Hypotheses"
+author: "Aura M. Alonso-Rodríguez"
+date: "February 26, 2020"
+output: html_document
+---
+<br />
+Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework07_S2020.html). 
+
+<br />
+
+
+##### In this exercise, I am creating fake data of plant species richness measured in 5x5m plots inside a tropical forest, 1 month prior to a major hurricane and for 5 months after it. 
+
+```{r}
+
+n_group <- 6 # number of treatment groups
+n_name <- c("1mo pre","1mo post","2mo post","3mo post","4mo post","5mo post")
+n_size <- c(11,13,12,9,12,10) #number of observations in our groups
+
+n_mean <- c(22,7,9,10,11,16)
+n_sd <- c(5,5,5,5,5,5) #ANOVA assumes that the variance is the same in all
+period <- rep(n_name,n_size)
+
+id <- 1:(sum(n_size))
+P.richness <- c(rnorm(n=n_size[1], mean=n_mean[1], sd=n_sd[1]),
+             rnorm(n=n_size[2], mean=n_mean[2], sd=n_sd[2]),
+             rnorm(n=n_size[3], mean=n_mean[3], sd=n_sd[3]),
+             rnorm(n=n_size[4], mean=n_mean[4], sd=n_sd[4]),
+             rnorm(n=n_size[5], mean=n_mean[5], sd=n_sd[5]),
+             rnorm(n=n_size[6], mean=n_mean[6], sd=n_sd[6]))
+ano_data <- data.frame(id,period,P.richness)
+ano_data$period <- factor(ano_data$period,
+                  levels = c("1mo pre","1mo post","2mo post","3mo post",
+                             "4mo post","5mo post"), ordered = TRUE)
+head(ano_data)
+
+```
+
+<br /> 
+
+##### Write code to analyze the data and to generate a useful graph of the data.
+
+```{r}
+# anova model 
+
+ano_model <- aov(P.richness~period, data=ano_data)
+summary(ano_model)
+TukeyHSD(ano_model)
+
+# ggplot
+library(ggplot2)
+
+ano_plot <- ggplot(data = ano_data,
+                   aes(x=period,
+                       y=P.richness)) + 
+                  geom_boxplot(fill='#A4A4A4', color="black")+
+                  labs(x="Sampling period", y = "Plant species richness") +
+                 theme_classic()
+print(ano_plot)
+
+```
+
+Since I have more than 2 groups, I used the Tukey post hoc test to generate pairwise comparisons between groups. As expected (due to the means I selected), richness pre hurricane is much different than all of the sampling times post hurricane, as forest recovery takes much longer. 
+
+However, after further consideration, I realized that ANOVA is probably not the best analysis to use here. It would have been better to use a repeated measures ANOVA. I will repeat the exercise below with only 2 time periods: pre and post hurricane.
+
+<br />
+
+##### Repeating exercise with only 2 time periods: pre and post hurricane.
+
+```{r}
+
+n_group <- 2 
+n_name <- c("1mo pre","1mo post")
+n_size <- c(13,11) 
+
+n_mean <- c(22,7) # We would expect plant richness to be much lower after a hurricane.
+n_sd <- c(5,5) #ANOVA assumes that the variance is the same in all
+period <- rep(n_name,n_size)
+
+id <- 1:(sum(n_size))
+P.richness <- c(rnorm(n=n_size[1], mean=n_mean[1], sd=n_sd[1]),
+                 rnorm(n=n_size[2], mean=n_mean[2], sd=n_sd[2]))
+ano_data <- data.frame(id,period,P.richness)
+ano_data$period <- factor(ano_data$period,
+                  levels = c("1mo pre","1mo post"), ordered = TRUE)
+
+# anova model 
+
+ano_model <- aov(P.richness~period, data=ano_data)
+summary(ano_model)
+
+# ggplot
+library(ggplot2)
+
+ano_plot <- ggplot(data = ano_data,
+                   aes(x=period,
+                       y=P.richness)) + 
+                  geom_boxplot(fill='#A4A4A4', color="black")+
+                  labs(x="Sampling period", y = "Plant species richness") +
+                 theme_classic()
+print(ano_plot)
+```
+
+<br /> 
+
+##### Repeating previous analysis but with different means to determine how small can the differences between the groups be (the “effect size”) to still detect a significant pattern (p < 0.05).
+
+```{r}
+n_group <- 2 
+n_name <- c("1mo pre","1mo post")
+n_size <- c(13,11) 
+
+n_mean <- c(15,10.4) # We would expect plant richness to be much lower after a hurricane.
+n_sd <- c(5,5) #ANOVA assumes that the variance is the same in all
+period <- rep(n_name,n_size)
+
+id <- 1:(sum(n_size))
+P.richness <- c(rnorm(n=n_size[1], mean=n_mean[1], sd=n_sd[1]),
+                 rnorm(n=n_size[2], mean=n_mean[2], sd=n_sd[2]))
+ano_data <- data.frame(id,period,P.richness)
+ano_data$period <- factor(ano_data$period,
+                  levels = c("1mo pre","1mo post"), ordered = TRUE)
+
+# anova model 
+
+ano_model <- aov(P.richness~period, data=ano_data)
+summary(ano_model)
+
+```
+
+This seems to be affected by the standard deviation. If the difference between the groups is close to the standard deviation (in this case 5), then it will be less probable to detect a significant difference between the groups. After repeating the code a few times, it seems that sometimes the same differences in mean (close to 5) can be nearly significant or not, just by chance. I repeated the same exercise, but changing the standard deviation to 2, and in this case the difference between the groups can be very close to 2 to still detect significant differences between them.
+
+<br /> 
+
+##### Repeating previous analysis but with different sample sizes to determine the minimum sample size needed in order to detect a statistically significant effect. 
+
+```{r}
+n_group <- 2 
+n_name <- c("1mo pre","1mo post")
+n_size <- c(3,3) 
+
+n_mean <- c(22,7) 
+n_sd <- c(5,5) 
+period <- rep(n_name,n_size)
+
+id <- 1:(sum(n_size))
+P.richness <- c(rnorm(n=n_size[1], mean=n_mean[1], sd=n_sd[1]),
+                 rnorm(n=n_size[2], mean=n_mean[2], sd=n_sd[2]))
+ano_data <- data.frame(id,period,P.richness)
+ano_data$period <- factor(ano_data$period,
+                  levels = c("1mo pre","1mo post"), ordered = TRUE)
+
+# anova model 
+
+ano_model <- aov(P.richness~period, data=ano_data)
+summary(ano_model)
+```
+
+In this case, I could lower the sample sizes of both groups all the way down to 2, and still get a significant difference between the groups. But, after running the code a few times, I noticed that it wasn't always significant. This speaks to the low power of this analysis, since a sample size of 2 seems to generate significant differences just by chance. Increasing the sample size of each group to 3 returns significant differences between them at all times. In my experience, a minimum sample size of 3 is what is typical and expected in ecological studies.
+
+<br /> 
+
+##### If you have time, try repeating this exercise with one of the more sophisticated distributions, such as the gamma or negative binomial (depending on the kind of data you have). You will have to spend some time figuring out by trial and error the parameter values you will need to generate appropriate means and variances of the different groups.
+
+to be continued...
