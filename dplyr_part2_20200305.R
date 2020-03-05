@@ -34,11 +34,11 @@ class(data)
 
 # saveRDS() can be used if you're only working in R
 
-saveRDS(starwars1, "StarWarsTibble")
+saveRDS(starwars1, "StarWarsTibble.rds")
 # saves R object as a file
 # use .rds so that you know that its an rds file
 
-sw <- readRDS("StarWarsTibble") # restores the R object
+sw <- readRDS("StarWarsTibble.rds") # restores the R object
 class(sw)
 
 
