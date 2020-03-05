@@ -27,8 +27,11 @@ There are 150 observations and 5 variables in this dataset.
 2. Create a new data frame iris1 that contains only the species virginica and versicolor with sepal lengths longer than 6 cm and sepal widths longer than 2.5 cm. How many observations and variables are in the dataset?
 
 ```{r}
-iris1 <- filter(iris, Species %in% c("virginica", "versicolor"), Sepal.Length > 6, Sepal.Width > 2.5)
+iris1 <- filter(iris, Species %in% c("virginica", "versicolor"), 
+                Sepal.Length > 6, Sepal.Width > 2.5)
+glimpse(iris1)
 ```
+There are 56 observations and 5 variables in this dataset.
 <br />
 
 3. Now, create a iris2 data frame from iris1 that contains only the columns for Species, Sepal.Length, and Sepal.Width. How many observations and variables are in the dataset?
