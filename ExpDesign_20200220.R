@@ -66,7 +66,7 @@ reg_sum$intercept # not I can see outputs of the model individually and use it
 
 
 # regression plot for data
-# library(ggplot2)
+library(ggplot2)
 reg_plot <- ggplot(data=reg_df, # ggplot requires data to be in a data frame.
                    aes(x=var_a,y=var_b)) +
                   geom_point() +
