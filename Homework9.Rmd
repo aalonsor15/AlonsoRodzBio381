@@ -108,7 +108,7 @@ my_boxplot()
 
 2. Once your code is up and working, modify your program do something else: record a new summary variable, code a new statistical analysis, or create a different set of random variables or output graph. Do not rewrite any of your existing functions. Instead, copy them, rename them, and then modify them to do new things. Once your new functions are written, add some more lines of program code, calling a mixture of your previous functions and your new functions to get the job done.
 
-```{r}
+```{r, message=FALSE}
 
 # -------------------------------------------------------------------------------
 # FUNCTION aov_table
@@ -149,7 +149,6 @@ dot_boxplot <- function(data=my_data) {
        x="Sampling period", y = "Plant species richness")
 
    print(p2)
-    message("Message: dot-boxplot has been created!")
 
 } # end of dot_boxplot
 # -------------------------------------------------------------------------------
@@ -168,6 +167,7 @@ dot_boxplot()
 
 ```
 
+<br /> 
 
 3. Optional. If time permits and you have the skills, try putting your program inside of a for loop and repeat the analysis with a different stochastic data set (each time you call a function that invokes the random number generator, it will create a new set of data for you to process). Can you create a data structure to store the summary statistics created in each pass through the loop? If not, your program will work, but it will only show the results from the final replicate (the previous results will be written over each time you traverse the loop).
 
