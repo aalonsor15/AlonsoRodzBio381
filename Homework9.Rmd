@@ -112,9 +112,9 @@ my_boxplot()
 
 # -------------------------------------------------------------------------------
 # FUNCTION aov_table
-# description: extracts the F, p value and df from an anova
-# inputs: input_description
-# outputs: output_description
+# description: extracts the df, F, and p-value from one-way ANOVA
+# inputs: summary of ANOVA result in list form
+# outputs: table with df, F and p-value from one-way ANOVA
 #################################################################################
 aov_table <- function(list = model) {
   
@@ -131,9 +131,9 @@ aov_table <- function(list = model) {
 
 # -------------------------------------------------------------------------------
 # FUNCTION dot_boxplot
-# description: description
-# inputs: input_description
-# outputs: output_description
+# description: generates a dot plot within a boxplot, showing distribution of data points
+# inputs: data frame with x_var in second column and y_var in third column
+# outputs: Boxplot + Dotplot
 #################################################################################
 dot_boxplot <- function(data=my_data) {
   
