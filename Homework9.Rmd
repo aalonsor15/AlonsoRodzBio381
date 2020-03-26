@@ -1,0 +1,174 @@
+---
+title: "Homework 9: Organizing code with structured programming"
+author: "Aura M. Alonso-Rodríguez"
+date: "March 26, 2020"
+output: html_document
+---
+
+
+<br />
+Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework09_S2020.html). 
+
+
+<br />
+
+1. Use the code that you worked on in Homework #7 (creating fake data sets) , and re-organize it following the principles of structured programming. Do all the work in a single chunk in your R markdown file, just as if you were writing a single R script. Start with all of your annotated functions, preliminary calls, and global variables. The program body should be only a few lines of code that call the appropriate functions and run them in the correct order. Make sure that the output from one function serves as the input to the next. You can either daisy-chain the functions or write separate lines of code to hold elements in temporary variables and pass the along.
+
+```{r}
+
+# load libraries ------------------------------------------------------------
+
+library(ggplot2) 
+
+# global variables ------------------------------------------------------------
+
+n_group <- 2 
+n_treatment <- c("1mo pre-hurricanes","1mo post-hurricanes")
+n_size <- c(13,11) 
+n_mean <- c(22,13) 
+n_sd <- c(5,5) 
+
+# -------------------------------------------------------------------------------
+# FUNCTION create_data
+# description: create fake data frame
+# inputs: n_group, n_name, n_size, n_mean, n_sd
+# outputs: data frame with fake data on plant richness pre and post hurricane
+#################################################################################
+create_data <- function(group = 2, 
+                        treatment = c("treatment1", "treatment2"),
+                        size = c(15,14),
+                        mean = c(20,10),
+                        sd = c(4,4)) {
+  
+  period <- rep(treatment,size)
+  id <- 1:(sum(size))
+
+  P.richness <- c(rnorm(n=size[1], mean=mean[1], sd=sd[1]),
+                 rnorm(n=size[2], mean=mean[2], sd=sd[2]))
+  df <- data.frame(id,period,P.richness)
+  df$period <- factor(df$period,
+                  levels = c(treatment[1],treatment[2]), ordered = TRUE)
+  return(df)
+} # end of create_data
+
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+# FUNCTION anova_1way
+# description: run a 1 way anova on fake data
+# inputs: data frame with x_var in second column and y_var in third column
+# outputs: summary of anova results
+#################################################################################
+anova_1way<- function(data=my_data) {
+
+  model <- aov(data[,3]~data[,2], data=data)
+
+  return(summary(model))
+
+} # end of anova_1way
+
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+# FUNCTION my_boxplot
+# description: this function created a boxplot of plant richness vs period
+# inputs: data frame with x_var in second column and y_var in third column
+# outputs: boxplot
+#################################################################################
+my_boxplot <- function(data=my_data) {
+
+    p1 <- ggplot(data = data,
+                  aes(x=data[,2],
+                       y=data[,3])) + 
+                  geom_boxplot(fill='#009933', color="black")+
+                  labs(x="Sampling period", y = "Plant species richness") +
+                 theme_classic()
+    print(p1)
+    message("Message: Boxplot has been created!")
+
+} # end of my_boxplot
+
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+
+# Running my functions (program body)
+
+my_data <- create_data(group=n_group, treatment=n_treatment, size=n_size,
+            mean=n_mean, sd=n_sd)
+model <- anova_1way()
+print(model)
+my_boxplot()
+
+# -------------------------------------------------------------------------------
+
+```
+
+<br />  
+
+2. Once your code is up and working, modify your program do something else: record a new summary variable, code a new statistical analysis, or create a different set of random variables or output graph. Do not rewrite any of your existing functions. Instead, copy them, rename them, and then modify them to do new things. Once your new functions are written, add some more lines of program code, calling a mixture of your previous functions and your new functions to get the job done.
+
+```{r}
+
+# -------------------------------------------------------------------------------
+# FUNCTION aov_table
+# description: extracts the F, p value and df from an anova
+# inputs: input_description
+# outputs: output_description
+#################################################################################
+aov_table <- function(list = model) {
+  
+    model <- unlist(list)
+    my_results <- matrix(model[c(1, 7, 9)], ncol=3, byrow=TRUE)
+    colnames(my_results) <- c("df", "F", "p-value")
+    rownames(my_results) <- ""
+    my_results <- as.table(my_results)
+    
+  return(round(my_results, digits=6))
+
+} # end of aov_table
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+# FUNCTION dot_boxplot
+# description: description
+# inputs: input_description
+# outputs: output_description
+#################################################################################
+dot_boxplot <- function(data=my_data) {
+  
+  p2 <- ggplot(data = data,
+               aes(x=data[,2], y=data[,3]))
+  p2 <- p2 + geom_boxplot() + 
+    geom_dotplot(binaxis='y', 
+               stackdir='center', 
+               dotsize = .8, 
+               fill="red") +
+    theme_minimal() + 
+    labs(title="Box plot + Dot plot",
+       x="Sampling period", y = "Plant species richness")
+
+   print(p2)
+    message("Message: dot-boxplot has been created!")
+
+} # end of dot_boxplot
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+
+# Running my functions (program body)
+
+
+my_data <- create_data(group=n_group, treatment=n_treatment, size=n_size,
+            mean=n_mean, sd=n_sd)
+model <- anova_1way()
+aov_table()
+dot_boxplot()
+
+
+```
+
+
+3. Optional. If time permits and you have the skills, try putting your program inside of a for loop and repeat the analysis with a different stochastic data set (each time you call a function that invokes the random number generator, it will create a new set of data for you to process). Can you create a data structure to store the summary statistics created in each pass through the loop? If not, your program will work, but it will only show the results from the final replicate (the previous results will be written over each time you traverse the loop).
+
+To be continued...
