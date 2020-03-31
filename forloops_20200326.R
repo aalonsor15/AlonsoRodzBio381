@@ -181,7 +181,7 @@ ran_walk <- function(times = 100,
     n[i + 1] <- n[i] * lambda + noise[i]
     if(n[i + 1] <= 0) {      # start of if statement
       n[i + 1] <- NA
-      cat("Population extinction at time", i-1, "\n")
+      cat("Population extinction at time", i, "\n")
       tkbell()    # runs a bell from my computer, like an alarm
       break    # jump out of the loop entirely, stops the loop when this happens
     }    # end of if statement
@@ -192,8 +192,59 @@ return(n)
 } # end of ran_walk function
 # -------------------------------------------------------------------------------
 
-ran_walk()
+# explore model parameters interactively with simple graphics
 
+pop <- ran_walk()
+qplot(x=1:100, y=pop, geom="line")
+
+# check out performance with no noise
+pop <- ran_walk(noise_sd=0)  # population replaces itself each time
+qplot(x=1:100, y=pop, geom="line")  
+
+pop <- ran_walk(noise_sd=0, lambda=1.1)  #exponential growth curve
+qplot(x=1:100, y=pop, geom="line") 
+
+pop <- ran_walk(noise_sd=0, lambda=0.98)  #exponential decline
+qplot(x=1:100, y=pop, geom="line") 
+
+pop <- ran_walk(noise_sd=0.5, lambda=0.98)  #exponential decline with a bit of noise
+qplot(x=1:100, y=pop, geom="line")
+ 
+
+
+# double for loops --------------------------------------------------------
+
+# embed one loop inside of another
+
+m <- matrix(round(runif(20), digits=2), nrow=5)
+# suggestion: when making test matrices, its best not to have the same # of rows and columns
+
+# loop over the rows
+for (i in 1:nrow(m)) {
+  m[i,] <- m[i,] + i
+}
+
+print(m)
+
+# loop over the columns
+m <- matrix(round(runif(20), digits=2), nrow=5)
+
+for (j in 1:ncol(m)) {
+  m[,j] <- m[,j] + j
+}
+
+print(m)
+
+# loop over both the rows and columns with a double for loop
+m <- matrix(round(runif(20), digits=2), nrow=5)
+
+for (i in 1:nrow(m)) {  # start of the outer (row) loop
+  for (j in 1:ncol(m)){  # start of the inner (column) loop
+    m[i,j] <- m[i,j] + i + j
+  } # end of inner (column) loop
+}  #end of outer (row) loop
+
+print(m)
 
 
 
