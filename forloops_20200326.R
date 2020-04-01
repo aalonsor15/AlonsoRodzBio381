@@ -158,7 +158,7 @@ for (i in seq_along(z_sub)) {
 # create a simple random walk population model function
 
 # -------------------------------------------------------------------------------
-# FUNCTION ran_walk
+# FUNCTION: ran_walk
 # description: stochastic random walk
 # inputs: times = number of time steps
 #         n1 = initial population size (=n[1])

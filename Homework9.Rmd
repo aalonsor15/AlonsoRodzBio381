@@ -29,7 +29,7 @@ n_mean <- c(22,13)
 n_sd <- c(5,5) 
 
 # -------------------------------------------------------------------------------
-# FUNCTION create_data
+# FUNCTION: create_data
 # description: create fake data frame
 # inputs: n_group, n_name, n_size, n_mean, n_sd
 # outputs: data frame with fake data on plant richness pre and post hurricane
@@ -37,7 +37,7 @@ n_sd <- c(5,5)
 create_data <- function(group = 2, 
                         treatment = c("treatment1", "treatment2"),
                         size = c(15,14),
-                        mean = c(20,10),
+                        mean = c(20,15),
                         sd = c(4,4)) {
   
   period <- rep(treatment,size)
@@ -54,7 +54,7 @@ create_data <- function(group = 2,
 # -------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------
-# FUNCTION anova_1way
+# FUNCTION: anova_1way
 # description: run a 1 way anova on fake data
 # inputs: data frame with x_var in second column and y_var in third column
 # outputs: summary of anova results
@@ -70,7 +70,7 @@ anova_1way<- function(data=my_data) {
 # -------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------
-# FUNCTION my_boxplot
+# FUNCTION: my_boxplot
 # description: this function created a boxplot of plant richness vs period
 # inputs: data frame with x_var in second column and y_var in third column
 # outputs: boxplot
@@ -111,7 +111,7 @@ my_boxplot()
 ```{r, message=FALSE}
 
 # -------------------------------------------------------------------------------
-# FUNCTION aov_table
+# FUNCTION: aov_table
 # description: extracts the df, F, and p-value from one-way ANOVA
 # inputs: summary of ANOVA result in list form
 # outputs: table with df, F and p-value from one-way ANOVA
@@ -130,7 +130,7 @@ aov_table <- function(list = model) {
 # -------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------
-# FUNCTION dot_boxplot
+# FUNCTION: dot_boxplot
 # description: generates a dot plot within a boxplot, showing distribution of data points
 # inputs: data frame with x_var in second column and y_var in third column
 # outputs: Boxplot + Dotplot
@@ -171,4 +171,32 @@ dot_boxplot()
 
 3. Optional. If time permits and you have the skills, try putting your program inside of a for loop and repeat the analysis with a different stochastic data set (each time you call a function that invokes the random number generator, it will create a new set of data for you to process). Can you create a data structure to store the summary statistics created in each pass through the loop? If not, your program will work, but it will only show the results from the final replicate (the previous results will be written over each time you traverse the loop).
 
-To be continued...
+```{r}
+
+iterations <- 20
+p_values <- matrix(NA, nrow=iterations, ncol=1)
+
+for (i in 1:iterations) {
+  df <- create_data()
+  aov <- anova_1way(df)
+  aov <- unlist(aov)
+  p_values[i,] <- aov[9]
+}
+
+round(p_values, digits=6)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

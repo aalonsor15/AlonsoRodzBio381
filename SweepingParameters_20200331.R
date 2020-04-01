@@ -9,7 +9,7 @@ library(ggplot2)
 # S=cA^z  describes species-area relationship in ecology (# species as function of area)
 
  # -------------------------------------------------------------------------------
- # FUNCTION species_area_curve
+ # FUNCTION: species_area_curve
  # description: creates a power function for S and A
  # inputs: A is a vector of island areas
  #          c is the intercept constant
@@ -28,7 +28,7 @@ library(ggplot2)
 head(species_area_curve())
 
 # -------------------------------------------------------------------------------
-# FUNCTION species_area_plot
+# FUNCTION: species_area_plot
 # description: plots species area curves with parameter values
 # inputs: A = vector of areas
 #         c = single value for the c parameter
@@ -84,7 +84,7 @@ for (i in seq_along(c_pars)) {
 expand.grid(c_pars,z_pars) # generates a data.frame as output
 
 # -------------------------------------------------------------------------------
-# FUNCTION sa_output
+# FUNCTION: sa_output
 # description: summary stats for species-area power function
 # inputs: vector of predicted species richness values
 # outputs: list of max-min, coefficient of variation

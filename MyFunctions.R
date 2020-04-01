@@ -5,7 +5,7 @@
 # -------------------------------------------------------------------------------
 # 
 # -------------------------------------------------------------------------------
-# FUNCTION get_data
+# FUNCTION: get_data
 # description: read in .csv file
 # inputs: .csv file
 # outputs: data frame
@@ -31,7 +31,7 @@ get_data <- function(file_name=NULL) {
 # -------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------
-# FUNCTION calculate_stuff
+# FUNCTION: calculate_stuff
 # description: fits an OLS regression model
 # inputs: x and y vectors of numeric; must be the same length
 # outputs: entire model summary from lm
@@ -50,7 +50,7 @@ calculate_stuff <- function(x_var=runif(10),
 # -------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------
-# FUNCTION summarize_output
+# FUNCTION: summarize_output
 # description: pull elements from the model summary list
 # inputs: list from summary call of lm
 # outputs: vector of regression residuals
@@ -69,7 +69,7 @@ summarize_output<- function(z=NULL) {
 # -------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------
-# FUNCTION graph_results
+# FUNCTION: graph_results
 # description: graph data and fitted OLS line
 # inputs: x and y vectors of numeric; must be of the same length
 # outputs: creates graph

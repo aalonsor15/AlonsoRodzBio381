@@ -25,6 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * ### [Creating fake data sets to explore hypotheses](Homework7.html)
 * ### [Data manipulations using dplyr](Homework8.html)
 * ### [Organizing code with structured programming](Homework9.html)
+* ### [For loops and randomization tests](Homework10.html)
 
 <br />
 

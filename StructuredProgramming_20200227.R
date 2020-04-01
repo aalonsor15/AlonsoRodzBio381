@@ -48,7 +48,7 @@ my_fun()
 
 # now try out cool new function snippet
 # -------------------------------------------------------------------------------
-# FUNCTION trial_funct
+# FUNCTION: trial_funct
 # description: one line explanation here
 # inputs: just x=5 for now
 # outputs: real number
