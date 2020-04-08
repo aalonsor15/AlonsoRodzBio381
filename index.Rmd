@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * ### [Data manipulations using dplyr](Homework8.html)
 * ### [Organizing code with structured programming](Homework9.html)
 * ### [For loops and randomization tests](Homework10.html)
+* ### [Batch Processing](Homework11.html)
 
 <br />
 

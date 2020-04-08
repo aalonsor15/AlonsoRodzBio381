@@ -61,7 +61,7 @@
 # Preliminaries ---------------------------------------------------------------------
 
 library(ggplot2)
-install.packages("TeachingDemos")
+# install.packages("TeachingDemos")
 library(TeachingDemos)
 
 set.seed(100) # this helps get the exact same set of random values every time I run 

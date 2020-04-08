@@ -393,7 +393,7 @@ return(counter)
 } # end of counts_cero
 # -------------------------------------------------------------------------------
 counts_cero()</code></pre>
-<pre><code>## [1] 477</code></pre>
+<pre><code>## [1] 510</code></pre>
 <pre class="r"><code>#rpois function would also give me a vector with zeroes in it (instead of using round)</code></pre>
 <p><br /></p>
 <ol start="2" style="list-style-type: decimal">
@@ -414,7 +414,7 @@ return(counter)
 } # end of counts_cero2
 # -------------------------------------------------------------------------------
 counts_cero2()</code></pre>
-<pre><code>## [1] 495</code></pre>
+<pre><code>## [1] 488</code></pre>
 <pre class="r"><code># -------------------------------------------------------------------------------
 # FUNCTION: counts_cero3
 # description: calculate the number of zeroes in a numeric vector
@@ -430,7 +430,7 @@ return(counter)
 } # end of counts_cero3
 # -------------------------------------------------------------------------------
 counts_cero3()</code></pre>
-<pre><code>## [1] 503</code></pre>
+<pre><code>## [1] 514</code></pre>
 <p><br /></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Write a function that takes as input two integers representing the number of rows and columns in a matrix. The output is a matrix of these dimensions in which each element is the product of the row number x the column number.</li>
@@ -466,10 +466,160 @@ new_matrix()</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Use the code from the upcoming April 2nd lecture (Randomization Tests) to design and conduct a randomization test for some of your own data. You will need to modify the functions that read in the data, calculate the metric, and randomize the data. Once those are set up, the program should run correctly calling your new functions. Also, to make your analysis fully repeatable, make sure you set the random number seed at the beginning (use either set.seed() in base R, or char2seed in the TeachingDemos package</li>
 </ol>
+<pre class="r"><code>library(ggplot2)
+library(TeachingDemos)
+char2seed(&quot;firefly&quot;)
+
+# -------------------------------------------------------------------------------
+# FUNCTION: read_data
+# description: read in (or generate) data set for analysis
+# inputs: file name (or nothing, as in this demo)
+# outputs: 3 column data frame of observed data (ID, x, y)
+#################################################################################
+read_data &lt;- function(z = NULL) {
+  if(is.null(z)) {
+    x_obs &lt;- 1:20
+    y_obs &lt;- x_obs + 10*rnorm(20)
+    df &lt;- data.frame(ID=seq_along(x_obs),
+                     x_obs,
+                     y_obs)
+  }
+  df &lt;- read.table(file=z,
+                   header=TRUE,
+                   stringsAsFactors=FALSE, sep = &quot;,&quot;)
+  return(df)
+
+} # end of read_data
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+# FUNCTION: get_metric
+# description: calculate metric for randomization test
+# inputs: 2-column data frame for regression  
+# outputs: regression slope
+#################################################################################
+get_metric &lt;- function(z=NULL) {
+  if(is.null(z)) {
+    x_obs &lt;- 1:20
+    y_obs &lt;- x_obs + 10*rnorm(20)
+    z &lt;- data.frame(ID=seq_along(x_obs),
+                    x_obs,
+                    y_obs)
+  }
+  
+  #use a dot(.) to pass along the same temporary variable from 1 element to the next
+  . &lt;- lm(z[,3]~z[,2])
+  . &lt;- summary(.)
+  . &lt;- .$coefficients[2,1]
+  slope &lt;- .
+  
+  return(slope)
+
+} # end of get_metric
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+# FUNCTION: shuffle_data
+# description: randomize the data for a regression analysis
+# inputs: 3 column data frame (ID, x, y)
+# outputs: 3 column data frame (ID, x, y)
+#################################################################################
+shuffle_data &lt;- function(z=NULL) {
+  if(is.null(z)) {
+    x_obs &lt;- 1:20
+    y_obs &lt;- x_obs + 10*rnorm(20)
+    z &lt;- data.frame(ID=seq_along(x_obs),
+                    x_obs,
+                    y_obs)
+  }
+  z[,3] &lt;- sample(z[,3])
+  return(z)
+
+} # end of shuffle_data
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+# FUNCTION: get_pval
+# description: calculate p value from simulation
+# inputs: list of observed metric and vector of simulated metrics
+# outputs: lower and upper tail probability value
+#################################################################################
+get_pval &lt;- function(z=NULL) {
+  if(is.null(z)) {
+    z &lt;- list(rnorm(1),rnorm(1000)) 
+  }
+  p_lower &lt;- mean(z[[2]] &lt;= z[[1]])
+  p_upper &lt;- mean(z[[2]] &gt;= z[[1]])
+  
+  
+  return(c(pL=p_lower, pU=p_upper))
+
+} # end of get_pval
+# -------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------
+# FUNCTION: plot_ran_test
+# description: create a ggplot of histogram of simulated values
+# inputs: list of observed metric and vector of simulated metrics
+# outputs: saved ggplot graph
+#################################################################################
+plot_ran_test &lt;- function(z=NULL) {
+  if(is.null(z)) {
+    z &lt;- list(rnorm(1),rnorm(1000))
+  }
+  df &lt;- data.frame(ID=seq_along(z[[2]]), sim_x=z[[2]])
+  p1 &lt;- ggplot(data=df, mapping=aes(x=sim_x))
+  p1 + geom_histogram(mapping=aes(fill=I(&quot;goldenrod&quot;),
+                                  color=I(&quot;black&quot;))) +
+    geom_vline(aes(xintercept=z[[1]], col=&quot;blue&quot;))
+  
+} # end of plot_ran_test
+# -------------------------------------------------------------------------------
+
+# now let&#39;s actually do the randomization test using these functions --------------
+
+
+n_sim &lt;- 1500 # number of simulated data sets
+x_sim &lt;- rep(NA, n_sim) # set up empty vector for simulated slopes
+df &lt;- read_data(z = &quot;my_data.csv&quot;) # get (fake) data
+x_obs &lt;- get_metric(df) # get slope of observed data
+
+for (i in seq_len(n_sim)) {
+  x_sim[i] &lt;- get_metric(shuffle_data(df)) # run simulation
+}
+
+slopes &lt;- list(x_obs, x_sim) 
+get_pval(slopes)</code></pre>
+<pre><code>##   pL   pU 
+## 0.67 0.33</code></pre>
+<pre class="r"><code>plot_ran_test(slopes)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /></p>
 <p><br /></p>
 <ol start="5" style="list-style-type: decimal">
 <li>For comparison, calculate in R the standard statistical analysis you would use with these data. How does the p-value compare for the standard test versus the p value you estimated from your randomization test? If the p values seem very different, run the program again with a different starting seed (and/or increase the number of replications in your randomization test). If there are persistent differences in the p value of the standard test versus your randomization, what do you think is responsible for this difference?</li>
 </ol>
+<pre class="r"><code>model &lt;- lm(df[,3]~df[,2])
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = df[, 3] ~ df[, 2])
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -20.848  -8.606   0.871   4.284  43.647 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 29.20368    6.67231   4.377 0.000749 ***
+## df[, 2]      0.06947    0.23642   0.294 0.773534    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 17.1 on 13 degrees of freedom
+## Multiple R-squared:  0.006597,   Adjusted R-squared:  -0.06982 
+## F-statistic: 0.08633 on 1 and 13 DF,  p-value: 0.7735</code></pre>
+<p>I ran a standard linear regression with my data, and it returned a p-value of 0.77, which means there is no significant relationship between my variables. The randomization test returned a p-value close to 0.67, which did not change much after running the program a few times, setting a different starting seed or increasing the number of replications. These two p-values seem very similar to me, so I think the randomization test worked. Both methods suggest that moth diversity is not driven by plant diversity in my study site.</p>
 
 
 
