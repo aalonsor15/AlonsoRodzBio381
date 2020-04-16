@@ -198,7 +198,7 @@ m1 <- ggplot(data = d,
                            y = cty, 
                            color = drv)) +
       geom_point(size = 2) + geom_smooth(method = "lm")
-print
+print(m1)
 
 
 
@@ -363,4 +363,7 @@ p1 <- ggplot(data = d[d$drv != "4",],
   geom_point(mapping = aes(color = drv)) + 
   geom_smooth()
 print(p1)
+
+
+
 

@@ -1,5 +1,5 @@
 # Summary stats for batch processing of regression models
-timestamp: 2020-04-08 17:42:03
+timestamp: 2020-04-15 13:21:01
 "ID","file_name","slope","p_val","r2"
 1,"Plot-1-TRACE 2018-06-12 10-55-16 -0400.csv","-2.76063435","< 0.001","0.8516477"
 2,"Plot-2-TRACE 2018-06-12 11-04-02 -0400.csv","-2.77267879","< 0.001","0.8544181"

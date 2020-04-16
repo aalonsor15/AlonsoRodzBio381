@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 * ### [Organizing code with structured programming](Homework9.html)
 * ### [For loops and randomization tests](Homework10.html)
 * ### [Batch Processing](Homework11.html)
+* ### [Advanced ggplotting](Homework12.html)
 
 <br />
 

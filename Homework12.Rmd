@@ -1,0 +1,131 @@
+---
+title: "Homework 12: Advanced ggplotting"
+author: "Aura M. Alonso-Rodríguez"
+date: "April 15, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+<br />
+Full instructions for this homework are available [here](https://gotellilab.github.io/Bio381/Homeworks/Homework12_S2020.html). 
+
+
+<br />
+
+For this exercise, use your newly-developed ggplot chops to create some nice graphs from your own data (If you do not have a good data frame to use for graphics, use one of the many built-in data frames from R (other than mpg, which we are using in class)). Experiment with different themes, theme base sizes, aesthetics, mappings, and faceting. When you are finished, try exporting them to high quality pdfs, jpgs, eps files, or other formats that you would use for submission to a journal. 
+<br /> 
+
+In this exercise, I encourage you to improve your graphics with elements that we have not (yet) covered in ggplot. For example, can you change the labels on a facet plot so that they are more informative than the variable names that are supplied from your data frame? Can you figure out how to add text annotations, lines and arrows to your graph? Can you figure out how to use custom colors that you have chosen for your fills and lines? Your resources for these explorations are google, Stack Overflow – and Lauren!
+
+
+```{r, warning=FALSE, message=FALSE, results=FALSE}
+
+# loading libraries
+
+library(ggplot2)
+library(ggthemes)
+library(patchwork)
+library(TeachingDemos)
+char2seed("tabonuco")
+library(vegan)
+library(tidyverse)
+library(ggpubr)
+
+# loading the data: abundance matrix of plants in 3 habitat types
+
+plants <- read.csv("Plant_matrix.csv", header = TRUE, stringsAsFactors = FALSE)
+plant.mds <- metaMDS(plants, distance = "bray", k = 2,trymax=100)  #using all the defaults
+
+data <- read.csv("Habitat.csv", header = TRUE, stringsAsFactors = FALSE)
+
+data.scores <- as.data.frame(scores(plant.mds))
+data.scores$Habitat <- unlist(data$Habitat)
+
+species.scores <- as.data.frame(scores(plant.mds, "species"))
+species.scores$species <- rownames(species.scores)  
+
+
+```
+
+
+
+```{r, warning=FALSE, message=FALSE}
+
+# NMDS graph using ggplot
+
+p1 <- ggplot() + 
+  geom_point(data=data.scores,aes(x=NMDS1,y=NMDS2,
+                                  color=Habitat),size=3) + 
+  geom_text(data=species.scores,aes(x=NMDS1,y=NMDS2, 
+                                    label = "*"),size=5, alpha=0.5) +
+  theme_bw(base_size = 12) +
+  theme(panel.grid = element_blank(),
+        legend.position = "none") + 
+  scale_color_manual(values=c("#009900", "#3399FF", "#FF6600")) + 
+  labs(subtitle = "Plant species composition") +
+  ylim(-0.45,0.6) +
+  xlim(-0.5, 0.5) +
+  annotate("text", label = paste("stress = ", round(plant.mds$stress, digits = 2)), 
+           x = .33, y = -0.40, fontface = 'italic')
+
+# Calculating plant richness and abundance
+
+d <- cbind(data, Abundance = rowSums(plants))
+d <- cbind(d, Richness = rowSums(plants != 0))
+
+# boxplot
+
+p2 <- ggplot(data = d,
+             mapping = aes(x = Habitat, y = Richness)) + 
+      geom_boxplot(color = I("black"),
+                   fill = c("#009900", "#3399FF", "#FF6600")) + 
+      theme_bw(base_size = 12) +
+      theme(legend.position = "none",
+            panel.grid = element_blank()) +
+      labs(subtitle = "Plant species richness by Habitat") +
+      ylab(label = "Richness") +
+      ylim(0,50) +
+      xlab("")
+
+# elevation and slope
+
+p3 <- ggplot(data = d, 
+             mapping = aes(x = Elevation, y = Richness)) + 
+      geom_point(size=3, mapping = aes(color = Habitat)) + 
+      geom_smooth(method = "lm", color = I("black")) +
+      theme_bw(base_size = 12) +
+      theme(legend.position = "none",
+            panel.grid = element_blank()) +
+      scale_color_manual(values=c("#009900", "#3399FF", "#FF6600")) +
+      labs(subtitle = "Plant species richness by Altitude") +
+      xlab(label = "Altitude (m)") +
+      ylab(label = "Richness") +
+      ylim(0,50) +
+      xlim(75,200)
+
+p4 <- ggplot(data = d, 
+             mapping = aes(x = Slope, y = Richness)) + 
+      geom_point(size=3, mapping = aes(color = Habitat)) + 
+      geom_smooth(method = "lm", color = I("black")) +
+      theme_bw(base_size = 12) +
+      theme(legend.position = "bottom",
+            panel.grid = element_blank()) +
+      scale_color_manual(values=c("#009900", "#3399FF", "#FF6600")) +
+      labs(subtitle = "Plant species richness by Slope") +
+      xlab(label = "Slope (%)") +
+      ylab(label = "Richness") +
+      ylim(0,50) +
+      xlim(0,40)
+
+
+
+(p1 | p2) / (p3 | p4)
+
+
+
+
+
+```
+
